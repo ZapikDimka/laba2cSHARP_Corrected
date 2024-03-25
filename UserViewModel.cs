@@ -47,19 +47,36 @@ namespace WpfApp1
 
             try
             {
-                if (User.Age < 0 || User.Age > 135)
-                {
-                    MessageBox.Show("Invalid age. Age cannot be less than 0 or greater than or equal to 135.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                UserValidation.ValidateAge(User.Age);
+                UserValidation.ValidateEmailAddress(User.EmailAddress);
+                UserValidation.EndsWithRu(User.EmailAddress);
 
                 await OnUpdateAsync();
+            }
+            catch (InvalidAgeException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (InvalidEmailException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (EmailEndsWithRuException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
                 IsProcessing = false;
             }
         }
+
+
+
+
+
+
+
 
         private async Task OnUpdateAsync()
         {
